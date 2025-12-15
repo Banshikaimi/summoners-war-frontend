@@ -1,3 +1,5 @@
+const BACKEND_URL = 'https://summoners-war-backend.onrender.com/api/streamers'; // <-- Mets ton URL Render ici
+
 const pages = {
   home: `
     <h1>Summoner's War : Sky Arena</h1>
@@ -53,7 +55,7 @@ async function showCommunityStreamers() {
   streamersList.innerHTML = `<p>Chargement des streameurs FR...</p>`;
 
   try {
-    const response = await fetch('https://summoners-war-backend.onrender.com/api/streamers');
+    const response = await fetch(BACKEND_URL);
     const streamers = await response.json();
 
     if (streamers.length === 0) {
