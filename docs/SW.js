@@ -53,7 +53,7 @@ async function showCommunityStreamers() {
   streamersList.innerHTML = `<p>Chargement des streameurs FR...</p>`;
 
   try {
-    const response = await fetch('https://summoners-war-backend.onrender.com');
+    const response = await fetch('https://summoners-war-backend.onrender.com/api/streamers');
     const streamers = await response.json();
 
     if (streamers.length === 0) {
