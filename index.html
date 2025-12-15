@@ -21,7 +21,7 @@
       container.innerHTML = '<p>Chargement...</p>';
 
       try {
-        const res = await fetch('https://TON_BACKEND_URL/api/streamers'); // 🔹 Remplace par ton URL backend Render
+        const res = await fetch('https://summoners-war-backend.onrender.com/api/streamers'); // 🔹 Remplace par ton URL backend Render
         const streamers = await res.json();
 
         let html = '';
