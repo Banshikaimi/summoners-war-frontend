@@ -2,63 +2,49 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Summoner's War Community</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Streameurs Summoner's War</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    h1 { text-align: center; margin-top: 20px; }
-    #streamers-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px; }
-    .streamer-card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 200px; text-align: center; }
-    .streamer-card img { width: 100%; border-radius: 4px; }
-    .online { border-color: red; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .streamer-card { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; width: 320px; }
+    .online { background-color: #d4f8d4; }
+    .offline { background-color: #f8d4d4; }
+    img { width: 100%; }
   </style>
 </head>
 <body>
-  <h1>Summoner's War : Sky Arena</h1>
-  <div id="main-content">
-    <div id="streamers-list">Chargement des streameurs FR...</div>
-  </div>
+  <h1>Streameurs Summoner's War</h1>
+  <div id="streamers-list"></div>
 
   <script>
-    async function showCommunityStreamers() {
-      const streamersList = document.getElementById('streamers-list');
-      streamersList.innerHTML = `<p>Chargement des streameurs FR...</p>`;
+    async function fetchStreamers() {
+      const container = document.getElementById('streamers-list');
+      container.innerHTML = '<p>Chargement...</p>';
 
       try {
-        // Remplace ici par l'URL de ton backend si nécessaire, sinon `/api/streamers`
-        const response = await fetch('https://summoners-war-backend.onrender.com/api/streamers');
-        if (!response.ok) throw new Error('Erreur réseau');
-
-        const streamers = await response.json();
-
-        if (!streamers || streamers.length === 0) {
-          streamersList.innerHTML = `<p>Aucun streameur francophone en live 😢</p>`;
-          return;
-        }
+        const res = await fetch('https://TON_BACKEND_URL/api/streamers'); // 🔹 Remplace par ton URL backend Render
+        const streamers = await res.json();
 
         let html = '';
         streamers.forEach(s => {
           html += `
-            <div class="streamer-card online">
+            <div class="streamer-card ${s.online ? 'online' : 'offline'}">
               <a href="${s.twitchUrl}" target="_blank">
-                <img src="${s.thumbnailUrl}" alt="${s.displayName}">
-                <h4>${s.displayName}</h4>
-                <p>${s.title}</p>
-                <p>${s.viewerCount} viewers</p>
+                ${s.thumbnailUrl ? `<img src="${s.thumbnailUrl}" alt="${s.name}">` : ''}
+                <h3>${s.name} ${s.online ? '🔴 En ligne' : '⚪ Hors ligne'}</h3>
+                ${s.online ? `<p>${s.title}</p><p>${s.viewerCount} viewers</p>` : ''}
               </a>
             </div>
           `;
         });
-        streamersList.innerHTML = html;
 
+        container.innerHTML = html;
       } catch (err) {
-        console.error('Erreur lors du fetch des streameurs :', err);
-        streamersList.innerHTML = `<p>Erreur lors du chargement des streameurs</p>`;
+        container.innerHTML = '<p>Erreur lors du chargement des streameurs</p>';
+        console.error(err);
       }
     }
 
-    // Appel au chargement de la page
-    document.addEventListener('DOMContentLoaded', showCommunityStreamers);
+    fetchStreamers();
   </script>
 </body>
 </html>
